@@ -2,20 +2,23 @@ package controllers
 
 import javax.inject._
 
-import play.api.libs.json.Json
 import play.api.mvc._
-import services.UserService
+import services.{PostsService, UserService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UserController @Inject()(userService: UserService)(implicit exec: ExecutionContext) extends Controller {
+class UserController @Inject()(userService: UserService, postsService: PostsService)(implicit exec: ExecutionContext) extends Controller {
 
   def getUser(id: String) = Action.async {
     println(s"got id: $id")
     try {
-      import models.Formats._
-      userService.getUser(id.toInt)(exec).map(user => Ok(Json.toJson(user)))
+      for {
+        posts <- postsService.getPostsForUser(id.toInt)
+        user <- userService.getUser(id.toInt)
+      } yield {
+        Ok(views.html.users(user, posts))
+      }
     }
     catch {
       case e: NumberFormatException => Future {
