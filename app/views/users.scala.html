@@ -1,20 +1,23 @@
 @(user: User, posts: Seq[Post])
 <h1>User data:</h1>
-<table>
-    <tr><td>Id:</td><td>@user.id</td></tr>
-    <tr><td>Username:</td><td>@user.username</td></tr>
-    <tr><td>Email:</td><td>@user.email</td></tr>
-    <tr><td>Phone:</td><td>@user.phone</td></tr>
-    <tr><td>Website:</td><td>@user.website</td></tr>
-    <tr><td>Adress:</td><td>@user.address</td></tr>
-    <tr><td>Company:</td><td>@user.company</td></tr>
-</table>
-<br>
+<div>
+    <table>
+        <tr><td>Id:</td><td>@user.id</td></tr>
+        <tr><td>Username:</td><td>@user.username</td></tr>
+        <tr><td>Email:</td><td>@user.email</td></tr>
+        <tr><td>Phone:</td><td>@user.phone</td></tr>
+        <tr><td>Website:</td><td>@user.website</td></tr>
+        <tr><td>City:</td><td>@user.address.city</td></tr>
+        <tr><td>Company:</td><td>@user.company.name</td></tr>
+    </table>
+</div>
 <h1>Posts:</h1>
-<ul>
-@for(p <- posts) {
-    <li><h3>@p.title</h3>
+<div>
+    <ul>
+    @for(p <- posts) {
+        <li>@p.id: <span style="text-decoration: underline;">@p.title</span>
         <h4>@p.body</h4>
-    </li>
-}
-</ul>
+        </li>
+    }
+    </ul>
+</div>
