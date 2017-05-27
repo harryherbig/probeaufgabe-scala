@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script>
+     var HttpClient = function() {
+       this.get = function(aUrl, aCallback) {
+         var anHttpRequest = new XMLHttpRequest();
+         anHttpRequest.onreadystatechange = function() {
+           if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+             aCallback(anHttpRequest.responseText);
+         }
+
+         anHttpRequest.open( "GET", aUrl, true );
+         anHttpRequest.send( null );
+       }
+     }
+
+     var client = new HttpClient();
+
+    function search() {
+      var selectedUser = document.getElementById("userSelection").value;
+      client.get("/user/" + selectedUser, function(response) {
+        document.getElementById("userRoom").innerHTML = response
+      });
+    }
+  </script>
+</head>
+<body>
+Bitte den User auswählen
+  <input id="userSelection" type="number" value=1 min=1 max=10 onchange="search()"/>
+  <script>search()</script>
+  <br><br>
+  <div id="userRoom"></div>
+</body>
+</html>

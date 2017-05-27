@@ -1,24 +1,20 @@
 @(user: User, posts: Seq[Post])
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Willkommen</title>
-</head>
-<body>
+<h1>User data:</h1>
 <table>
-    <tr><td>Email:</td><td>@user.email</td></tr>
     <tr><td>Id:</td><td>@user.id</td></tr>
     <tr><td>Username:</td><td>@user.username</td></tr>
+    <tr><td>Email:</td><td>@user.email</td></tr>
+    <tr><td>Phone:</td><td>@user.phone</td></tr>
+    <tr><td>Website:</td><td>@user.website</td></tr>
+    <tr><td>Adress:</td><td>@user.address</td></tr>
+    <tr><td>Company:</td><td>@user.company</td></tr>
 </table>
-    <br>
-    <ul>
-        @for(p <- posts) {
-            <li><h3>@p.title</h3>
-                <h4>@p.body</h4>
-            </li>
-        }
-    </ul>
-</body>
-</html>
+<br>
+<h1>Posts:</h1>
+<ul>
+@for(p <- posts) {
+    <li><h3>@p.title</h3>
+        <h4>@p.body</h4>
+    </li>
+}
+</ul>

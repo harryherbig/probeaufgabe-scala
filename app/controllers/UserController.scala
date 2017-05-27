@@ -31,4 +31,8 @@ class UserController @Inject()(userService: UserService, postsService: PostsServ
 
   }
 
+  def userMenu() = Action {
+    Ok(views.html.menu())
+  }
+
 }
