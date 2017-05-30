@@ -10,3 +10,7 @@ package models
 case class Company(name: String,
                    catchPhrase: String,
                    bs: String)
+
+object Company {
+  def empty = Company ("empty", "empty", "empty")
+}

@@ -14,3 +14,7 @@ case class Address(street: String,
                    city: String,
                    zipcode: String,
                    geo: Geo)
+
+object Address {
+  def empty = Address("empty", "empty", "empty", "empty", null)
+}

@@ -19,3 +19,8 @@ case class User(id: Int,
                  address: Address,
                  company: Company
                )
+
+object User {
+  def empty = User(0, "empty", "empty", "empty", "empty", Address.empty, Company.empty)
+}
+

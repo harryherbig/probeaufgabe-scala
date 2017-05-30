@@ -4,8 +4,9 @@ import javax.inject.Inject
 
 import com.typesafe.config.ConfigObject
 import models.User
-import play.api.Configuration
-import play.api.libs.json.{JsSuccess, JsValue, Json}
+import org.apache.commons.lang3.time.StopWatch
+import play.api.{Configuration, Logger}
+import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,17 +17,30 @@ class UserService @Inject()(ws: WSClient,
   val host: String = userConfig.toConfig.getString("host")
   val endpoint: String = userConfig.toConfig.getString("endpoint")
 
-  def getUser(id: Int)(implicit exec: ExecutionContext) : Future[User] = {
-    val eventualWSResponse = ws.url(s"$host/$endpoint/$id").get()
-    eventualWSResponse.map { response =>
-      import models.Reads._
-      val parse: JsValue = Json.parse(response.body)
-      println(parse.toString())
-      parse.validate[User] match {
-        case user: JsSuccess[User] => user.value
-        case _ => throw new RuntimeException("Error while parsing Json")
+  val log: Logger = Logger(this.getClass)
+  val stopWatch = new StopWatch()
+
+  def getUser(id: Int)(implicit exec: ExecutionContext): Future[User] = {
+    stopWatch.reset()
+    stopWatch.start()
+    log.debug(s"[User] started")
+    ws.url(s"$host/$endpoint/$id")
+      .execute()
+      .map { response =>
+        import models.Reads._
+        Json.parse(response.body)
+          .validate[User] match {
+          case user: JsSuccess[User] =>
+            stopWatch.stop()
+            log.debug(s"[User] took: ${stopWatch.getTime}")
+            user.value
+          case error: JsError => throw new RuntimeException(
+            s"""JsError '$error'
+               |while parsing Json:
+               |${response.body}""".stripMargin)
+
+        }
       }
-    }
   }
 
 }
